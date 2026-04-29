@@ -46,6 +46,4 @@ stack_outline_app/
 
 ## Notes
 
-- SQLite is used out of the box via `DATABASE_URL=sqlite:///app.db`.
-- To switch databases, set `DATABASE_URL` (for example, PostgreSQL/MySQL URI) and install the corresponding driver.
-- Tables are auto-created at startup for this minimal starter (`db.create_all()`).
+- Using MySQL for this project instead of SQLite

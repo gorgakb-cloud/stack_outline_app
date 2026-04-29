@@ -1,11 +1,12 @@
 from flask import Blueprint, render_template
+from .models import Professor, Class, Assignment
 
-from .models import ExampleRecord
-
-main = Blueprint("main", __name__)
+main = Blueprint('main', __name__)
 
 
-@main.route("/")
+@main.route("/", methods=["GET", "POST"])
 def index():
-    records = ExampleRecord.query.order_by(ExampleRecord.id.desc()).all()
-    return render_template("index.html", records=records)
+    professors = Professor.query.all()
+    classes = Class.query.all()
+    assignments = Assignment.query.all()
+    return render_template("index.html", professors=professors, classes=classes, assignments=assignments)
