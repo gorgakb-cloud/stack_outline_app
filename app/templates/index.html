@@ -8,10 +8,7 @@
 
     <div class="right_side">
         <h1>Assignments</h1>
-        <form action="/" method="post">
-            <input type="text" name="assignment_name" id="assignment_name">
-            <input type="submit" value="Add Assignment">
-        </form>
+        <a href="{{ url_for('main.add_assignment') }}"> Add Assignment </a>
         <table>
             <tr>
                 <th>Title</th>
@@ -23,19 +20,22 @@
                 <th>Updated Date</th>
                 <th>Actions</th>
             </tr>
+            {% for assignment in assignments %}
             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{ assignment.title }}</td>
+                <td>{{ assignment.description }}</td>
+                <td>{{ assignment.class.title }}</td>
+                <td>{{ assignment.due_date }}</td>
+                <td>{{ assignment.status }}</td>
+                <td>{{ assignment.grade }}</td>
+                <td>{{ assignment.updated_date }}</td>
                 <td>
-                    <a href="">Delete</a>
-                    <a href="">Update</a>
+                    <a href="{{ url_for('main.update_assignment', id=assignment.id) }}">Update</a>
+                    <br>
+                    <a href="{{ url_for('main.delete_assignment', id=assignment.id) }}">Delete</a>
                 </td>
             </tr>
+            {% endfor %}
         </table>
     </div>
 
@@ -53,10 +53,7 @@
         </table>
 
         <h1>Classes</h1>
-        <form action="/" method="post">
-            <input type="text" name="class_name" id="class_name">
-            <input type="submit" value="Add Class">
-        </form>
+        <a href="{{ url_for('main.add_class') }}"> Add Class </a>
         <table>
             <tr>
                 <th>Title</th>
@@ -65,18 +62,20 @@
                 <th>Updated Date</th>
                 <th>Actions</th>
             </tr>
+            {% for class in classes %}
             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{ class.title }}</td>
+                <td>{{ class.professor.name }}</td>
+                <td>{{ class.assignment_count }}</td>
+                <td>{{ class.updated_date }}</td>
                 <td>
-                    <a href="">Delete</a>
-                    <a href="">Update</a>
+                     <a href="{{ url_for('main.update_class', id=class.id) }}">Update</a>
+                    <br>
+                    <a href="{{ url_for('main.delete_class', id=class.id) }}">Delete</a>
                 </td>
             </tr>
+            {% endfor %}
         </table>
-
     </div>
 
 </div>

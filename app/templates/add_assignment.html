@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Add Assignment | Assignment Tracking App{% endblock %}
+
+{% block content %}
+
+<div class="main">
+    
+    <h1>Add Assignment</h1>
+
+    <form action="{{ url_for('main.add_assignment') }}" method="post">
+        
+        <label>Title:</label><br>
+        <input type="text" name="title" required><br>
+
+        <label>Description:</label><br>
+        <input type="text" name="description"><br>
+
+        <label>Class:</label><br>
+        <select name="class_name">
+            {% for c in classes %}
+                <option value="{{ c.CID }}">{{ c.Title }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label>Due Date:</label><br>
+        <input type="date" name="due_date"><br>
+
+        <label>Status:</label><br>
+        <select name="status">
+            {% for s in statuses %}
+                <option value="{{s.SID}}">{{s.Name}}</option>
+            {% endfor %}
+        </select><br>
+
+        <label>Grade:</label><br>
+        <input type="number" name="grade"><br><br>
+
+        <input type="submit" value="Submit">
+    </form> 
+
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Add Class | Assignment Tracking App{% endblock %}
+
+{% block content %}
+
+<div class ="main">
+
+    <h1> Add Class</h1>
+        <form action="{{ url_for('main.add_class') }}" method="post">
+            
+            <label>Title:</label><br>
+            <input type="text" name="title" required><br>
+
+            <label>Professor:</label><br>
+            <select name="class_id">
+                {% for p in professors %}
+                    <option value="{{ p.PID }}">{{ p.Name }}</option>
+                {% endfor %}
+            </select><br>
+
+            <label>Assignment Count:</label><br>
+            <input type="number" name="assignment_count" required><br>
+            <input type="submit" value="Submit">
+        </form> 
+</div>
+{% endblock %}

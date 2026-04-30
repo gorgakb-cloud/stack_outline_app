@@ -86,4 +86,88 @@ class Assignment(Base):
 
     I reformatted/fixed these to fit the code I already created and inserted them as class creation statements
     ----------------------------------------------------------------------------
+    AI Model: ChatGPT
+
+    Query: want to prepopulate status table
     
+    Answer:
+    def seed_status_table():
+    statuses = ["Not Started", "In Progress", "Completed", "Graded"]
+
+    for s in statuses:
+        exists = Status.query.filter_by(name=s).first()
+        if not exists:
+            db.session.add(Status(name=s))
+
+    db.session.commit()
+
+    Use: Put this in a statuses.py file
+    ----------------------------------------------------------------------------
+    AI Model: ChatGPT
+
+    Query: reformat
+    <div class="right_side"> <h1>Assignments</h1> <a href="{{ url_for('add_assignment') }}"> Add Assignment </a> <table> <tr> <th>Title</th> <th>Description</th> <th>Class</th> <th>Due Date</th> <th>Status</th> <th>Grade</th> <th>Updated Date</th> <th>Actions</th> </tr> <tr> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td> <a href="">Delete</a> <a href="">Update</a> </td> </tr> </table> </div>
+
+    Answer:
+    {% for assignment in assignments %}
+<tr>
+    <td>{{ assignment.Title }}</td>
+    <td>{{ assignment.Description }}</td>
+    <td>{{ assignment.class_.Title }}</td>
+    <td>{{ assignment.DueDate }}</td>
+    <td>{{ assignment.Status }}</td>
+    <td>{{ assignment.Grade }}</td>
+    <td>{{ assignment.UpdatedDate }}</td>
+    <td>
+        <a href="{{ url_for('main.delete_assignment', id=assignment.AID) }}">Delete</a>
+        <a href="{{ url_for('main.update_assignment', id=assignment.AID) }}">Update</a>
+    </td>
+</tr>
+{% endfor %}
+
+Use: using this to fix the error in my index file
+-------------------------------------------------------------------------------------------
+Model: ChatGPT
+
+Query: create assignment form
+
+Response: 
+<div class="main">
+    
+    <h1>Add Assignment</h1>
+
+    <form action="{{ url_for('main.add_assignment') }}" method="post">
+        
+        <label>Title:</label><br>
+        <input type="text" name="title" required><br>
+
+        <label>Description:</label><br>
+        <input type="text" name="description"><br>
+
+        <label>Class:</label><br>
+        <select name="class_id">
+            {% for c in classes %}
+                <option value="{{ c.CID }}">{{ c.Title }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label>Due Date:</label><br>
+        <input type="date" name="due_date"><br>
+
+        <label>Status:</label><br>
+        <select name="status">
+            <option value="Not Started">Not Started</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+        </select><br>
+
+        <label>Grade:</label><br>
+        <input type="number" name="grade"><br><br>
+
+        <input type="submit" value="Submit">
+    </form> 
+
+</div>
+
+Use: use this code to add an assignment, use as a template for an add class form
+
