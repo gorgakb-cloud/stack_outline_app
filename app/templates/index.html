@@ -6,7 +6,7 @@
 
 <div class="main">
 
-    <div class="right_side">
+    <div class="left_side">
         <h1>Assignments</h1>
         <a href="{{ url_for('main.add_assignment') }}"> Add Assignment </a>
         <table>
@@ -15,6 +15,7 @@
                 <th>Description</th>
                 <th>Class</th>
                 <th>Due Date</th>
+                <th>Days Until Due</th>
                 <th>Status</th>
                 <th>Grade</th>
                 <th>Updated Date</th>
@@ -22,17 +23,18 @@
             </tr>
             {% for assignment in assignments %}
             <tr>
-                <td>{{ assignment.title }}</td>
-                <td>{{ assignment.description }}</td>
-                <td>{{ assignment.class.title }}</td>
-                <td>{{ assignment.due_date }}</td>
-                <td>{{ assignment.status }}</td>
-                <td>{{ assignment.grade }}</td>
-                <td>{{ assignment.updated_date }}</td>
+                <td>{{ assignment.Title }}</td>
+                <td>{{ assignment.Description }}</td>
+                <td>{{ assignment.class_ref.Title }}</td>
+                <td>{{ assignment.DueDate }}</td>
+                <td></td>
+                <td>{{ assignment.status.Name }}</td>
+                <td>{{ assignment.Grade }}</td>
+                <td>{{ assignment.UpdatedDate }}</td>
                 <td>
-                    <a href="{{ url_for('main.update_assignment', id=assignment.id) }}">Update</a>
+                    <a href="">Update</a>
                     <br>
-                    <a href="{{ url_for('main.delete_assignment', id=assignment.id) }}">Delete</a>
+                    <a href="/delete_assignment/{{ assignment.AID }}">Delete</a>
                 </td>
             </tr>
             {% endfor %}
@@ -41,15 +43,24 @@
 
     <div class="divider"></div>
 
-    <div class="left_side">
+    <div class="right_side">
 
         <h1>Stats</h1>
         <table>
             <tr>
                 <th>Total Assignments</th>
-                <th>Average Grade</th>
+                <th>Overdue Assignments</th>
                 <th>Next Due Assignment</th>
             </tr>
+            
+      
+            <tr>
+                <td>{{ assignments|count}}</td>
+                <td></td>
+                <td></td>
+            </tr>
+        
+            
         </table>
 
         <h1>Classes</h1>
@@ -64,14 +75,36 @@
             </tr>
             {% for class in classes %}
             <tr>
-                <td>{{ class.title }}</td>
-                <td>{{ class.professor.name }}</td>
-                <td>{{ class.assignment_count }}</td>
-                <td>{{ class.updated_date }}</td>
+                <td>{{ class.Title }}</td>
+                <td>{{ class.professor.FullName }}</td>
+                <td>{{ class.assignments|count }}</td>
+                <td>{{ class.UpdatedDate }}</td>
                 <td>
-                     <a href="{{ url_for('main.update_class', id=class.id) }}">Update</a>
+                     <a href="">Update</a>
                     <br>
-                    <a href="{{ url_for('main.delete_class', id=class.id) }}">Delete</a>
+                    <a href="/delete_class/{{ class.CID }}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+          <h1>Professors</h1>
+        <a href="{{ url_for('main.add_professor') }}"> Add Professor </a>
+        <table>
+            <tr>
+                <th>FullName</th>
+                <th>Email</th>
+                <th>Updated Date</th>
+                <th>Actions</th>
+            </tr>
+            {% for professor in professors %}
+            <tr>
+                <td>{{ professor.FullName }}</td>
+                <td>{{ professor.Email }}</td>
+                <td>{{ professor.UpdatedDate }}</td>
+                <td>
+                     <a href="">Update</a>
+                    <br>
+                    <a href="/delete_professor/{{ professor.PID }}">Delete</a>
                 </td>
             </tr>
             {% endfor %}

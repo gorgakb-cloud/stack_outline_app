@@ -7,21 +7,19 @@
 <div class ="main">
 
     <h1> Add Class</h1>
-        <form action="{{ url_for('main.add_class') }}" method="post">
-            
-            <label>Title:</label><br>
-            <input type="text" name="title" required><br>
+     <form action="{{ url_for('main.add_class') }}" method="post">
 
-            <label>Professor:</label><br>
-            <select name="class_id">
-                {% for p in professors %}
-                    <option value="{{ p.PID }}">{{ p.Name }}</option>
-                {% endfor %}
-            </select><br>
+        <label>Title:</label><br>
+        <input type="text" name="title" required><br>
 
-            <label>Assignment Count:</label><br>
-            <input type="number" name="assignment_count" required><br>
-            <input type="submit" value="Submit">
-        </form> 
+        <label>Professor:</label><br>
+        <select name="professor_id" required>
+        {% for p in professors %}
+            <option value="{{ p.PID }}">{{ p.FullName }}</option>
+        {% endfor %}
+    </select><br>
+
+    <input type="submit" value="Submit">
+</form>
 </div>
 {% endblock %}

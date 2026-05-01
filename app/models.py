@@ -39,9 +39,10 @@ class Assignment(db.Model):
     DueDate = db.Column(db.DateTime)
 
     SID = db.Column(db.Integer, db.ForeignKey('status_lookup.SID'))
-    Grade = db.Column(db.DECIMAL(5, 2), default=0.00)
+    Grade = db.Column(db.DECIMAL(5, 2), nullable=True)
 
     CID = db.Column(db.Integer, db.ForeignKey('classes.CID', ondelete='CASCADE'))
     UpdatedDate = db.Column(db.DateTime, server_default=db.func.current_timestamp())
 
     status = db.relationship("StatusLookup", backref="assignments")
+   
