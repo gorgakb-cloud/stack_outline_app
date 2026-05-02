@@ -34,6 +34,22 @@
         </select><br>
 
         <label>Grade:</label><br>
-        <input type="number" name="grade" min="0" max="100"><br><br>
+        <input type="number" name="grade" min="0" max="100" disabled><br><br>
         <input type="submit" value="Add Assignment">
+
+    </form>
+    <script>
+        const statusSelect = document.querySelector('select[name="status"]');
+        const gradeInput = document.querySelector('input[name="grade"]');
+
+        statusSelect.addEventListener('change', function() {
+            if (this.options[this.selectedIndex].text === 'Graded') {
+                gradeInput.disabled = false;
+            } else {
+                gradeInput.disabled = true;
+                gradeInput.value = '';
+            }
+        });
+    </script>
+</div>
 {% endblock %}

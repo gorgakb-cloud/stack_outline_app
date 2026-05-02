@@ -214,4 +214,68 @@ You should explicitly compare to true:
 {{ assignments|selectattr("is_overdue", "equalto", true)|list|length }}
 
 Use: Fix the error of the calculation not showing up on the UI
+---------------------------------------------------------------------------------------------------------
+Model: Github Copilot
 
+Query: want to only allow grade column to be filled if status = graded
+
+Response:
+<script>
+        const statusSelect = document.querySelector('select[name="status"]');
+        const gradeInput = document.querySelector('input[name="grade"]');
+
+        statusSelect.addEventListener('change', function() {
+            if (this.options[this.selectedIndex].text === 'Graded') {
+                gradeInput.disabled = false;
+            } else {
+                gradeInput.disabled = true;
+                gradeInput.value = null;
+            }
+        });
+    </script>
+
+Use: Insert this script into add/update assignment forms
+---------------------------------------------------------------------------------------------------------
+Model: ChatGPT
+
+Query: error werkzeug.exceptions.BadRequestKeyError: 400 Bad Request: The browser (or proxy) sent a request that this server could not understand. KeyError: 'grade'
+
+Response:
+That error is happening because your backend is trying to access:
+
+request.form['grade']
+
+…but the form submission does not include a field named "grade" in some cases.
+
+That’s exactly what a BadRequestKeyError means in Flask: missing form key.
+
+Why it’s happening in your case
+
+From your setup, the most likely causes are:
+
+1. Grade input is disabled in HTML
+
+When you do:
+
+gradeInput.disabled = true;
+
+ Disabled inputs are NOT sent in the form submission at all.
+
+So Flask never receives "grade".
+
+2. You are using request.form['grade'] (unsafe access)
+
+This will crash if missing.
+
+Fix (BEST PRACTICE): use .get()
+
+Change this:
+
+request.form['grade']
+
+to:
+
+request.form.get('grade')
+
+Use: couldnt find the root of the error in this case, fixed the syntax in the route
+---------------------------------------------------------------------------------------------------------

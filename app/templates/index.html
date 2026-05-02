@@ -26,14 +26,18 @@
             {% for assignment in assignments %}
             <tr>
                 <td>{{ assignment.Title }}</td>
+                {% if assignment.Description %}
                 <td>{{ assignment.Description }}</td>
+                {% else %}
+                <td>--</td>
+                {% endif %}
                 <td>{{ assignment.class_ref.Title }}</td>
                 <td>{{ assignment.DueDate }}</td>
 
                 {% if assignment.is_overdue and assignment.status.Name != 'Graded' %}
                 <td style="color: red;">Overdue by {{ assignment.days_until_due |abs}} day(s)</td>
                 {% elif assignment.status.Name == 'Graded' %}
-                <td style="color:green">Graded</td>
+                <td>--</td>
                 {% else %}
                 <td>{{ assignment.days_until_due }}</td>
                 {% endif %}
@@ -69,17 +73,12 @@
             
       
             <tr>
-                {%if assignments|count > 0 %}
                 <td>{{ assignments|count}}</td>
-                {% else %}
-                <td>0</td>
-                {% endif %}
-
                 <td>{{ assignments|selectattr("is_overdue", "equalto", true)|list|length }}</td>
             
-
-                {% if assignments|selectattr("is_overdue", "equalto", false)|list|length > 0 %}
-                <td>{{ (assignments|selectattr("is_overdue", "equalto", false)|first).Title }}</td>
+                {% if assignments|rejectattr("status.Name", "in", ["Graded","Completed"])|list|length > 0 %}
+                <td>{{ (assignments|
+                        rejectattr("status.Name", "in", ["Graded","Completed"])|first).Title }}</td>
                 {% else %}
                 <td>No upcoming assignments</td>
                 {% endif %}

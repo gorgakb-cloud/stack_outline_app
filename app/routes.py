@@ -25,7 +25,7 @@ def add_assignment():
             CID=request.form['class_name'],
             DueDate=request.form['due_date'],
             SID=request.form['status'],
-            Grade=request.form['grade']
+            Grade=request.form.get('grade')
         )
 
         db.session.add(new_assignment)

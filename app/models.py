@@ -54,5 +54,7 @@ class Assignment(db.Model):
 
     @property
     def is_overdue(self):
-        return self.DueDate < datetime.datetime.now() if self.DueDate else False
+        if self.status and self.status.Name in ['Graded', 'Completed']:
+            return False
+        return self.DueDate and datetime.datetime.now() > self.DueDate
         
