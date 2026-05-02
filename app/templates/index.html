@@ -9,6 +9,8 @@
     <div class="left_side">
         <h1>Assignments</h1>
         <a href="{{ url_for('main.add_assignment') }}"> Add Assignment </a>
+        <a href="{{ url_for('main.filter_assignment') }}">Filter</a>
+        <a href="{{ url_for('main.show_all_assignments') }}">Show All Assignments</a>
         <table>
             <tr>
                 <th>Title</th>
@@ -27,12 +29,24 @@
                 <td>{{ assignment.Description }}</td>
                 <td>{{ assignment.class_ref.Title }}</td>
                 <td>{{ assignment.DueDate }}</td>
-                <td></td>
+
+                {% if assignment.is_overdue and assignment.status.Name != 'Graded' %}
+                <td style="color: red;">Overdue by {{ assignment.days_until_due |abs}} day(s)</td>
+                {% elif assignment.status.Name == 'Graded' %}
+                <td style="color:green">Graded</td>
+                {% else %}
+                <td>{{ assignment.days_until_due }}</td>
+                {% endif %}
+
                 <td>{{ assignment.status.Name }}</td>
-                <td>{{ assignment.Grade }}</td>
+                {% if assignment.status.Name != 'Graded' %}
+                <td> Not Graded</td>
+                {% else %}  
+                <td>{{ assignment.Grade }} </td>
+                {% endif %}
                 <td>{{ assignment.UpdatedDate }}</td>
                 <td>
-                    <a href="">Update</a>
+                    <a href="/update_assignment/{{ assignment.AID }}">Update</a>
                     <br>
                     <a href="/delete_assignment/{{ assignment.AID }}">Delete</a>
                 </td>
@@ -55,9 +69,20 @@
             
       
             <tr>
+                {%if assignments|count > 0 %}
                 <td>{{ assignments|count}}</td>
-                <td></td>
-                <td></td>
+                {% else %}
+                <td>0</td>
+                {% endif %}
+
+                <td>{{ assignments|selectattr("is_overdue", "equalto", true)|list|length }}</td>
+            
+
+                {% if assignments|selectattr("is_overdue", "equalto", false)|list|length > 0 %}
+                <td>{{ (assignments|selectattr("is_overdue", "equalto", false)|first).Title }}</td>
+                {% else %}
+                <td>No upcoming assignments</td>
+                {% endif %}
             </tr>
         
             
@@ -80,7 +105,7 @@
                 <td>{{ class.assignments|count }}</td>
                 <td>{{ class.UpdatedDate }}</td>
                 <td>
-                     <a href="">Update</a>
+                     <a href="/update_class/{{ class.CID }}">Update</a>
                     <br>
                     <a href="/delete_class/{{ class.CID }}">Delete</a>
                 </td>
@@ -102,7 +127,7 @@
                 <td>{{ professor.Email }}</td>
                 <td>{{ professor.UpdatedDate }}</td>
                 <td>
-                     <a href="">Update</a>
+                     <a href="/update_professor/{{ professor.PID }}">Update</a>
                     <br>
                     <a href="/delete_professor/{{ professor.PID }}">Delete</a>
                 </td>

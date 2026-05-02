@@ -1,3 +1,5 @@
+import datetime
+
 from .extensions import db
 
 
@@ -45,4 +47,12 @@ class Assignment(db.Model):
     UpdatedDate = db.Column(db.DateTime, server_default=db.func.current_timestamp())
 
     status = db.relationship("StatusLookup", backref="assignments")
-   
+    
+    @property
+    def days_until_due(self):
+        return (self.DueDate - datetime.datetime.now()).days if self.DueDate else None
+
+    @property
+    def is_overdue(self):
+        return self.DueDate < datetime.datetime.now() if self.DueDate else False
+        

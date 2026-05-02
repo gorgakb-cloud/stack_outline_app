@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Filter Assignments | Assignment Tracking App{% endblock %}
+
+{% block content %}
+
+<div class="main">
+    
+    <h1>Filter Assignments</h1>
+
+    <form action="{{ url_for('main.filter_assignment') }}" method="post">
+        
+        <label>Class:</label><br>
+        <select name="class_name">
+            <option value="">All Classes</option>
+            {% for c in classes %}
+                <option value="{{ c.CID }}">{{ c.Title }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label>Status:</label><br>
+        <select name="status">
+            <option value="">All Statuses</option>
+            {% for s in status %}
+                <option value="{{s.SID}}">{{s.Name}}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <input type="submit" value="Filter Assignments">
+    </form>
+</div>
+{% endblock %}

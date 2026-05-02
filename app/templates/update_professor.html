@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Update Professor | Assignment Tracking App{% endblock %}
+
+{% block content %}
+
+<div class="main">
+
+    <h1> Update Professor</h1>
+        <form action="{{ url_for('main.update_professor', PID=professor.PID) }}" method="post">
+            
+            <label>Full Name:</label><br>
+            <input type="text" name="full_name" value="{{ professor.FullName }}" required><br>
+
+            <label>Email:</label><br>
+            <input type="email" name="email" value="{{ professor.Email }}" required><br>
+
+            <input type="submit" value="Submit">
+        </form>
+</div>
+{% endblock %}

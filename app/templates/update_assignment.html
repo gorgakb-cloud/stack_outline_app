@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Update Assignment | Assignment Tracking App{% endblock %}
+
+{% block content %}
+
+<div class="main">
+    
+    <h1>Update Assignment</h1>
+
+    <form action="{{ url_for('main.update_assignment', AID=assignment.AID) }}" method="post">
+        
+        <label>Title:</label><br>
+        <input type="text" name="title" value="{{ assignment.Title }}" required><br>
+
+        <label>Description:</label><br>
+        <input type="text" name="description" value="{{ assignment.Description }}"><br>
+
+        <label>Class:</label><br>
+        <select name="class_name" required>
+            {% for c in classes %}
+                <option value="{{ c.CID }}" {% if c.CID == assignment.CID %}selected{% endif %}>{{ c.Title }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label>Due Date:</label><br>
+        <input type="datetime-local" name="due_date" value="{{ assignment.DueDate }}" required><br>
+
+        <label>Status:</label><br>
+        <select name="status" required>
+            {% for s in status %}
+                <option value="{{s.SID}}" {% if s.SID == assignment.SID %}selected{% endif %}>{{s.Name}}</option>
+            {% endfor %}
+        </select><br>
+        
+        <label>Grade:</label><br>
+        <input type="number" name="grade" value="{{ assignment.Grade }}" min="0" max="100"><br><br>
+        
+        <input type="submit" value="Update Assignment">
+    </form> 
+
+</div>
+{% endblock %}

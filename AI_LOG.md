@@ -170,4 +170,48 @@ Response:
 </div>
 
 Use: use this code to add an assignment, use as a template for an add class form
+---------------------------------------------------------------------------------------------------------
+Model: ChatGPT
+
+Query:
+Creating a days until due column in the assignments table
+
+Response:
+
+from datetime import datetime
+
+class Assignment(db.Model):
+    __tablename__ = 'assignments'
+
+    AID = db.Column(db.Integer, primary_key=True)
+    Title = db.Column(db.String(100), nullable=False)
+    Description = db.Column(db.String(500))
+    DueDate = db.Column(db.DateTime)
+
+    @property
+    def days_until_due(self):
+        if self.DueDate:
+            return (self.DueDate - datetime.utcnow()).days
+        return None
+
+Use: use this as a model for creating a column to calculate the days until assignment is due, instead of hardcoding it into the database schema
+---------------------------------------------------------------------------------------------------------
+Model: ChatGPT
+
+Query: >{{ assignments|selectattr("is_overdue")|count }} not showing up on webserver
+
+Response:hat line is almost right, but there’s a small Jinja gotcha.
+
+ Your code
+{{ assignments|selectattr("is_overdue")|count }}
+Problem:
+
+selectattr("is_overdue") only works cleanly when is_overdue is a simple attribute that is truthy, but Jinja can behave inconsistently with Python @property booleans depending on context.
+ Correct and reliable version
+
+You should explicitly compare to true:
+
+{{ assignments|selectattr("is_overdue", "equalto", true)|list|length }}
+
+Use: Fix the error of the calculation not showing up on the UI
 
