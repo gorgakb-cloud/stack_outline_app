@@ -38,6 +38,19 @@
         
         <input type="submit" value="Update Assignment">
     </form> 
+    <script>
+        const statusSelect = document.querySelector('select[name="status"]');
+        const gradeInput = document.querySelector('input[name="grade"]');
 
+        statusSelect.addEventListener('change', function() {
+            if (this.options[this.selectedIndex].text == 'Graded') {
+                gradeInput.disabled = false;
+                gradeInput.required = true;
+            } else {
+                gradeInput.disabled = true;
+                gradeInput.value = '';
+            }
+        });
+    </script>
 </div>
 {% endblock %}

@@ -19,21 +19,34 @@ def add_assignment():
     classes = Class.query.all()
     status = StatusLookup.query.all()
     if request.method == 'POST':
+        
+        status_id = request.form['status']
+        grade = request.form.get('grade')
+
+        if status_id == '3': 
+            if not grade:
+                raise ValueError("Grade required when status is Graded")
+        else:
+            grade = None 
+
         new_assignment = Assignment(
             Title=request.form['title'],
             Description=request.form['description'],
             CID=request.form['class_name'],
             DueDate=request.form['due_date'],
-            SID=request.form['status'],
-            Grade=request.form.get('grade')
+            SID=status_id,
+            Grade=grade
         )
+        try:
+            db.session.add(new_assignment)
 
-        db.session.add(new_assignment)
-        db.session.commit()
+            db.session.commit()
 
-        return redirect(url_for('main.index'))
+            return redirect(url_for('main.index'))
 
-   
+        except:
+            print("Adding assignment failed")
+
     return render_template('add_assignment.html', classes=classes, status=status)
 
 
@@ -46,11 +59,15 @@ def add_class():
             Title=request.form['title'],
             PID=request.form['professor_id']
         )
-        db.session.add(new_class)
-        db.session.commit()
-        return redirect(url_for('main.index'))
+        try:
+            db.session.add(new_class)
+            db.session.commit()
+            return redirect(url_for('main.index'))
+        except:
+            print("Adding class failed")
         
     
+
     return render_template('add_class.html', professors=professors)
 
 @main.route('/add_professor', methods=['GET', 'POST'])
@@ -60,31 +77,44 @@ def add_professor():
             FullName=request.form['full_name'],
             Email=request.form['email']
         )
-        db.session.add(new_professor)
-        db.session.commit()
-        return redirect(url_for('main.index'))
+        try:
+            db.session.add(new_professor)
+            db.session.commit()
+            return redirect(url_for('main.index'))
+        except:
+            print("Adding professor failed")
+       
         
     return render_template('add_professor.html')
 
 @main.route('/delete_professor/<int:PID>')
 def delete_professor(PID):
     professor = Professor.query.get_or_404(PID)
-    db.session.delete(professor)
-    db.session.commit()
+    try:
+        db.session.delete(professor)
+        db.session.commit()
+    except:
+        print("Deleting professor failed")
     return redirect('/')
 
 @main.route('/delete_class/<int:CID>')
 def delete_class(CID):
     class_todelete = Class.query.get_or_404(CID)
-    db.session.delete(class_todelete)
-    db.session.commit()
+    try:
+        db.session.delete(class_todelete)
+        db.session.commit()
+    except:
+        print("Deleting class failed")
     return redirect('/')
 
 @main.route('/delete_assignment/<int:AID>')
 def delete_assignment(AID):
     assignment = Assignment.query.get_or_404(AID)
-    db.session.delete(assignment)
-    db.session.commit()
+    try:
+        db.session.delete(assignment)
+        db.session.commit()
+    except:
+        print("Deleting assignment failed")
     return redirect('/')
 
 @main.route('/update_assignment/<int:AID>', methods=['GET', 'POST'])
@@ -94,16 +124,32 @@ def update_assignment(AID):
     status = StatusLookup.query.all()
 
     if request.method == 'POST':
-        assignment.Title = request.form['title']
-        assignment.Description = request.form['description']
-        assignment.CID = request.form['class_name']
-        assignment.DueDate = request.form['due_date']
-        assignment.SID = request.form['status']
-        assignment.Grade = request.form['grade']
-        assignment.UpdatedDate = datetime.now()
+            status_id = request.form['status']
+            grade = request.form.get('grade')
 
-        db.session.commit()
-        return redirect(url_for('main.index'))
+            if status_id == '3': 
+                if not grade:
+                    raise ValueError("Grade required when status is Graded")
+            else:
+                grade = None 
+
+            new_assignment = Assignment(
+                Title=request.form['title'],
+                Description=request.form['description'],
+                CID=request.form['class_name'],
+                DueDate=request.form['due_date'],
+                SID=status_id,
+                Grade=grade
+            )
+            try:
+                db.session.add(new_assignment)
+
+                db.session.commit()
+
+                return redirect(url_for('main.index'))
+
+            except:
+                print("Adding assignment failed")
 
     return render_template('update_assignment.html', assignment=assignment, classes=classes, status=status)
 
@@ -116,9 +162,11 @@ def update_class(CID):
         class_to_update.Title = request.form['title']
         class_to_update.PID = request.form['professor_id']
         class_to_update.UpdatedDate = datetime.now()
-
-        db.session.commit()
-        return redirect(url_for('main.index'))
+        try:
+            db.session.commit()
+            return redirect(url_for('main.index'))
+        except:
+            print("Updating class failed")
 
     return render_template('update_class.html', class_to_update=class_to_update, professors=professors)
 
@@ -130,9 +178,12 @@ def update_professor(PID):
         professor.FullName = request.form['full_name']
         professor.Email = request.form['email']
         professor.UpdatedDate = datetime.now()
-
-        db.session.commit()
-        return redirect(url_for('main.index'))
+        try:
+            db.session.commit()
+            return redirect(url_for('main.index'))
+        except:
+            print("Updating professor failed")
+        
 
     return render_template('update_professor.html', professor=professor)
 

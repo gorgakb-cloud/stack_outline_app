@@ -88,23 +88,6 @@ class Assignment(Base):
     ----------------------------------------------------------------------------
     AI Model: ChatGPT
 
-    Query: want to prepopulate status table
-    
-    Answer:
-    def seed_status_table():
-    statuses = ["Not Started", "In Progress", "Completed", "Graded"]
-
-    for s in statuses:
-        exists = Status.query.filter_by(name=s).first()
-        if not exists:
-            db.session.add(Status(name=s))
-
-    db.session.commit()
-
-    Use: Put this in a statuses.py file
-    ----------------------------------------------------------------------------
-    AI Model: ChatGPT
-
     Query: reformat
     <div class="right_side"> <h1>Assignments</h1> <a href="{{ url_for('add_assignment') }}"> Add Assignment </a> <table> <tr> <th>Title</th> <th>Description</th> <th>Class</th> <th>Due Date</th> <th>Status</th> <th>Grade</th> <th>Updated Date</th> <th>Actions</th> </tr> <tr> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td> <a href="">Delete</a> <a href="">Update</a> </td> </tr> </table> </div>
 
@@ -279,3 +262,49 @@ request.form.get('grade')
 
 Use: couldnt find the root of the error in this case, fixed the syntax in the route
 ---------------------------------------------------------------------------------------------------------
+Model: ChatGPT
+
+Query: ensuring two step transaction when creating/updating assignment when its graded
+
+Response: 
+@main.route('/add_assignment', methods=['GET', 'POST'])
+def add_assignment():
+    classes = Class.query.all()
+    status = StatusLookup.query.all()
+
+    if request.method == 'POST':
+        try:
+            status_id = request.form['status']
+            grade = request.form.get('grade')
+
+            # Step 1: validate dependent logic
+            if status_id == '3':  # assuming 3 = Graded
+                if not grade:
+                    raise ValueError("Grade required when status is Graded")
+            else:
+                grade = None  # force consistency
+
+            # Step 2: create assignment
+            new_assignment = Assignment(
+                Title=request.form['title'],
+                Description=request.form['description'],
+                CID=request.form['class_name'],
+                DueDate=request.form['due_date'],
+                SID=status_id,
+                Grade=grade
+            )
+
+            db.session.add(new_assignment)
+
+            # Step 3: commit everything together
+            db.session.commit()
+
+            return redirect(url_for('main.index'))
+
+        except Exception as e:
+            db.session.rollback()
+            print("Transaction failed:", e)
+
+    return render_template('add_assignment.html', classes=classes, status=status)
+
+Use: tweaked my existing code to ensure that graded assignments must have a grade associated with them

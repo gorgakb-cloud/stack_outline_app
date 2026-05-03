@@ -43,8 +43,9 @@
         const gradeInput = document.querySelector('input[name="grade"]');
 
         statusSelect.addEventListener('change', function() {
-            if (this.options[this.selectedIndex].text === 'Graded') {
+            if (this.options[this.selectedIndex].text == 'Graded') {
                 gradeInput.disabled = false;
+                gradeInput.required = true;
             } else {
                 gradeInput.disabled = true;
                 gradeInput.value = '';

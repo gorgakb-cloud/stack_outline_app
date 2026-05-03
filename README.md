@@ -58,4 +58,5 @@ stack_outline_app/
 - Using MySQL for this project instead of SQLite
 - Professor signed off on normalization/schema changes
 - Normalization report can be found in NORMALIZATION.md
+- If the local webserver doesnt come up when you run run.py, make sure you are cd-ed into the right directory (stack_outline_app)
 
