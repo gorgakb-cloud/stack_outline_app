@@ -37,21 +37,50 @@ stack_outline_app/
 ```
 
 ## Installation Instructions
+1. Download MariaDB (https://mariadb.org/download/)
 
-1. Create and activate a virtual environment.
+2. Run the installer, REMEMBER THE PASSWORD YOU SET
+   - This will be used in config.py
+
+3. Navigate to the MariaDB folder on your computer, and open the MariaDB command prompt
+   - login via this command (will ask you for your password):
    ```
-   python -m venv venv   
-   venv\Scripts\activate 
+   mariadb -u root -p
    ```
-2. Install dependencies:
+   - create database:
+   ```
+   CREATE DATABASE school_tracker;
+   EXIT;
+   ```
+4. Download the .sql file to your computer from this repo, then copy its path
+   - Navigate back to MariaDB command prompt
+   ```
+   -u root -p school_tracker < "COPIED PATH"
+   ```
+5. Log back into MariaDB again, then run this command:
+   ```
+   USE school_tracker;
+   ```
+   - can confirm via SHOW TABLES command
+
+6. Navigate to VSCode stack_outline_app
+
+7. Open config.py, and change the password in the URI to the one youve set. 
+
+8. Create and activate a virtual environment
+   ```
+   python -m venv .venv   
+   .venv\Scripts\activate 
+   ```
+9. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
-3. Run the app:
+10. Run the app:
    ```bash
    python run.py
    ```
-4. Open http://127.0.0.1:5000
+11. Open http://127.0.0.1:5000
 
 ## Notes
 
