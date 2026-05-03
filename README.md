@@ -16,26 +16,6 @@ Personal assignment tracking app, with functions such as:
 - Adding/Deleting/Updating professors
 - High level overview of assignment count, overdue assignments, and upcoming assignments
 
-
-## Project Structure
-
-```
-stack_outline_app/
-  app/
-    __init__.py
-    extensions.py
-    models.py
-    routes.py
-    static/css/styles.css
-    templates/base.html
-    templates/index.html
-  config.py
-  run.py
-  requirements.txt
-  .env.example
-  .gitignore
-```
-
 ## Installation Instructions
 1. Download MariaDB (https://mariadb.org/download/)
 
@@ -84,7 +64,7 @@ stack_outline_app/
 
 ## Notes
 
-- Using MySQL for this project instead of SQLite
+- Using MySQL for this project instead of SQLite, tables created in HeidiSQL
 - Professor signed off on normalization/schema changes
 - Normalization report can be found in NORMALIZATION.md
 - If the local webserver doesnt come up when you run run.py, make sure you are cd-ed into the right directory (stack_outline_app)
